@@ -1,7 +1,7 @@
 #35
 from django import forms
 
-from catalogos.models import Categoria, ProcesosPlanta
+from catalogos.models import Categoria, ProcesosPlanta, OperacionDiaria, ControlSulfato
 
 
 class CategoriaForm(forms.ModelForm):
@@ -44,6 +44,68 @@ class ProcesosPlantaForm(forms.ModelForm):
 
         labels= {'nombre': "Nombre funcionario",
                 "activo:":"Estado"}
+
+        widget={'nombre': forms.TextInput()}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+#+++ OPERACIONES DIARIAS ++++++
+class OperacionDiariaForm(forms.ModelForm):
+    class Meta:
+        model=OperacionDiaria
+        fields =['nombre',
+                'hora',
+                'caudal_entrada_LxS',
+                #'caudal_entrada_m3',
+                'caudal_salida_LxS',
+                #'caudal_salida_m3',
+                'sul_dial',
+               # 'sul_g_minut',
+               # 'sul_mg_l',
+                'precloracion_Lxdia',
+                'cloracion_Lxdia',
+               # 'cloracion_mg_l',
+                'tq_almacenam_altura_m',
+               # 'tq_almacenam_altura_m3',
+                #'volumen_salida_acum',
+                #'volumen_salida_real'
+                ]
+   
+
+        labels= {'nombre': "Nombre funcionario",
+                "activo:":"Estado"}
+
+        widget={'nombre': forms.TextInput()}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++
+class ControlSulfatoForm(forms.ModelForm):
+    class Meta:
+        model=ControlSulfato
+        fields =[   'nombre',
+                    'turno',
+                    'consumo_sulf',
+                    'sedimentador_1',
+                    'sedimentador_2',
+                    'existencia_bultos_sulf',
+                    'consumo_cal',
+                    'observaciones',
+                    'alimenta_existencias',
+]
+        labels= {'nombre': "Nombre funcionario",
+                        "activo:":"Estado"}
+
 
         widget={'nombre': forms.TextInput()}
 

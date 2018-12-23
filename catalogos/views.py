@@ -6,8 +6,8 @@ from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-from catalogos.models import Categoria, ProcesosPlanta
-from catalogos.forms import CategoriaForm, ProcesosPlantaForm
+from catalogos.models import Categoria, ProcesosPlanta, OperacionDiaria, ControlSulfato
+from catalogos.forms import CategoriaForm, ProcesosPlantaForm, OperacionDiariaForm, ControlSulfatoForm
 from generales.views import SinPrivilegios
 
 
@@ -28,9 +28,9 @@ class CategoriaNew(SuccessMessageMixin, LoginRequiredMixin, SinPrivilegios,
     success_url= reverse_lazy("catalogos:categoria_list")
     success_message="Control Diario ingresado Satisfactoriamente"
 #----Retorne Usuario-----
-#def form_valid(self, form):
- #   form.instance.creadopor =self.request.user
-  #  return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.creadopor =self.request.user
+        return super().form_valid(form)
 
 class CategoriaEdit(LoginRequiredMixin, SinPrivilegios, generic.UpdateView):
     permission_required = "catalogos.change_categoria"
@@ -84,6 +84,81 @@ class ProcesosPlantaDel(LoginRequiredMixin, SinPrivilegios, generic.DeleteView):
     success_url= reverse_lazy("catalogos:ProcesosPlanta_list")
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class OperacionDiariaView(LoginRequiredMixin, generic.ListView):
+    model = OperacionDiaria
+    template_name = "catalogos/OperacionDiaria_list.html"
+    context_object_name = "obj"
+    login_url = 'generales:login'
+
+class OperacionDiariaNew(SuccessMessageMixin, LoginRequiredMixin, SinPrivilegios,
+                   generic.CreateView):
+    permission_required = "catalogos.add_OperacionDiaria"
+    model=OperacionDiaria
+    template_name="catalogos/OperacionDiaria_form.html"
+    context_object_name = 'obj'
+    form_class=OperacionDiariaForm
+    success_url= reverse_lazy("catalogos:OperacionDiaria_list")
+    success_message="Operacion Diaria ingresada Satisfactoriamente"
+
+class OperacionDiariaEdit(LoginRequiredMixin, SinPrivilegios, generic.UpdateView):
+    permission_required = "catalogos.change_OperacionDiaria"
+    model=OperacionDiaria
+    template_name="catalogos/OperacionDiaria_form.html"
+    context_object_name = 'obj'
+    form_class=OperacionDiariaForm
+    success_url= reverse_lazy("catalogos:OperacionDiaria_list")
+    success_message="La Operacion Diaria se han actualizado Satisfactoriamente"
+
+class OperacionDiariaDel(LoginRequiredMixin, SinPrivilegios, generic.DeleteView):
+    permission_required = "catalogos.delete_OperacionDiaria"
+    model=OperacionDiaria
+    template_name="catalogos/OperacionDiaria_del.html"
+    context_object_name = 'obj' 
+    success_url= reverse_lazy("catalogos:OperacionDiaria_list")
+
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class ControlSulfatoView(LoginRequiredMixin, generic.ListView):
+    model = ControlSulfato
+    template_name = "catalogos/ControlSulfato_list.html"
+    context_object_name = "obj"
+    login_url = 'generales:login'
+
+class ControlSulfatoNew(SuccessMessageMixin, LoginRequiredMixin, SinPrivilegios,
+                   generic.CreateView):
+    permission_required = "catalogos.add_ControlSulfato"
+    model=ControlSulfato
+    template_name="catalogos/ControlSulfato_form.html"
+    context_object_name = 'obj'
+    form_class=ControlSulfatoForm
+    success_url= reverse_lazy("catalogos:ControlSulfato_list")
+    success_message="Control sulfato ingresado Satisfactoriamente"
+
+class ControlSulfatoEdit(LoginRequiredMixin, SinPrivilegios, generic.UpdateView):
+    permission_required = "catalogos.change_ControlSulfato"
+    model=ControlSulfato
+    template_name="catalogos/ControlSulfato_form.html"
+    context_object_name = 'obj'
+    form_class=ControlSulfatoForm
+    success_url= reverse_lazy("catalogos:ControlSulfato_list")
+    success_message="El Control del Sulfato se han actualizado Satisfactoriamente"
+
+class ControlSulfatoDel(LoginRequiredMixin, SinPrivilegios, generic.DeleteView):
+    permission_required = "catalogos.delete_OperacionDiaria"
+    model=ControlSulfato
+    template_name="catalogos/OperacionDiaria_del.html"
+    context_object_name = 'obj' 
+    success_url= reverse_lazy("catalogos:OperacionDiaria_list")
+
+
+
+
+
+
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 def categoria_print(self, pk=None):
     import io
     from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle
